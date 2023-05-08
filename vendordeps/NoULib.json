@@ -1,0 +1,34 @@
+{
+    "fileName": "NoULib.json",
+    "name": "NoULib",
+    "version": "0.0.1",
+    "uuid": "",
+    "mavenUrls": [
+        "https://furseiry.github.io/NoULib/repos/"
+    ],
+    "jsonUrl": "https://furseiry.github.io/NoULib/NoULib.json",
+    "javaDependencies": [
+        {
+            "groupId": "com.NoULib.lib",
+            "artifactId": "NoULib-java",
+            "version": "0.0.1"
+        }
+    ],
+    "jniDependencies": [],
+    "cppDependencies": [
+        {
+            "groupId": "com.NoULib.lib",
+            "artifactId": "NoULib-cpp",
+            "version": "0.0.1",
+            "libName": "NoULib",
+            "sharedLibrary": false,
+            "skipInvalidPlatforms": true,
+            "binaryPlatforms": [
+                "windowsx86-64",
+                "linuxx86-64",
+                "osxuniversal",
+                "linuxathena"
+            ]
+        }
+    ]
+}

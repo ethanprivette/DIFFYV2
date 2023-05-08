@@ -1,0 +1,55 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "NoUGPIO[2]": {
+        "header": {
+          "open": true
+        }
+      },
+      "NoUMotor[1]": {
+        "header": {
+          "open": true
+        }
+      },
+      "NoUMotor[2]": {
+        "header": {
+          "open": true
+        }
+      },
+      "NoUMotor[3]": {
+        "header": {
+          "open": true
+        }
+      },
+      "NoUMotor[4]": {
+        "header": {
+          "open": true
+        }
+      },
+      "NoUServo[1]": {
+        "header": {
+          "open": true
+        }
+      },
+      "NoUServo[2]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/ExampleSubsystem": "Subsystem",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "open": true
+      }
+    }
+  }
+}
