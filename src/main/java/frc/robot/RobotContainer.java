@@ -26,8 +26,8 @@ import frc.robot.subsystems.DriveSubsystem;
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
-  private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
-  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
+  private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_primaryController = new CommandXboxController(Constants.PRIMARYCONTROLLERPORT);
@@ -35,6 +35,11 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    m_driveSubsystem.setDefaultCommand(new RunCommand(() -> m_driveSubsystem.drive(
+      modifyAxis(m_primaryController.getLeftY()),
+      modifyAxis(m_primaryController.getLeftX()),
+      modifyAxis(-m_primaryController.getRightX())),
+      m_driveSubsystem));
     // Configure the trigger bindings
     configureBindings();
   }
@@ -50,49 +55,30 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    m_primaryController.axisGreaterThan(1, 0.5)
-      .whileTrue(new RunCommand(() -> m_DriveSubsystem.drive(modifyAxis(m_primaryController.getLeftX()), 0, 0), 
-        m_DriveSubsystem));
-    m_primaryController.axisLessThan(1, 0.5)
-      .whileTrue(new RunCommand(() -> m_DriveSubsystem.drive(modifyAxis(m_primaryController.getLeftX()), 0, 0), 
-        m_DriveSubsystem));
-    m_primaryController.axisGreaterThan(0, 0.5)
-      .whileTrue(new RunCommand(() -> m_DriveSubsystem.drive(0, modifyAxis(m_primaryController.getLeftY()), 0), 
-        m_DriveSubsystem));
-    m_primaryController.axisLessThan(0, 0.5)
-      .whileTrue(new RunCommand(() -> m_DriveSubsystem.drive(0, modifyAxis(m_primaryController.getLeftY()), 0),
-        m_DriveSubsystem));
-    m_primaryController.axisGreaterThan(3, .05)
-      .whileTrue(new RunCommand(() -> m_DriveSubsystem.drive(0, 0, modifyAxis(m_primaryController.getRightX())), 
-        m_DriveSubsystem));
-    m_primaryController.axisLessThan(3, 0.5)
-      .whileTrue(new RunCommand(() -> m_DriveSubsystem.drive(0, 0, modifyAxis(m_primaryController.getRightX())),
-        m_DriveSubsystem));
-
     m_primaryController.povLeft()
       .whileTrue(new RunCommand(
-        () -> m_DriveSubsystem.drive(0, -1, 0),
-        m_DriveSubsystem));
+        () -> m_driveSubsystem.drive(0, -1, 0),
+        m_driveSubsystem));
 
     m_primaryController.povRight()
       .whileTrue(new RunCommand(
-        () -> m_DriveSubsystem.drive(0, 1, 0),
-        m_DriveSubsystem));     
+        () -> m_driveSubsystem.drive(0, 1, 0),
+        m_driveSubsystem));     
 
     m_primaryController.povUp()
       .whileTrue(new RunCommand(
-        () -> m_DriveSubsystem.drive(1, 0, 0),
-        m_DriveSubsystem));
+        () -> m_driveSubsystem.drive(1, 0, 0),
+        m_driveSubsystem));
 
     m_primaryController.povDown()
       .whileTrue(new RunCommand(
-        () -> m_DriveSubsystem.drive(-1, 0, 0),
-        m_DriveSubsystem));
+        () -> m_driveSubsystem.drive(-1, 0, 0),
+        m_driveSubsystem));
 
-    m_secondaryController.povRight().onTrue(new InstantCommand(m_ArmSubsystem::nudgeShoulderForward));
-    m_secondaryController.povLeft().onTrue(new InstantCommand(m_ArmSubsystem::nudgeShoulderBackward));
-    m_secondaryController.povUp().onTrue(new InstantCommand(m_ArmSubsystem::nudgeElbowUp));
-    m_secondaryController.povDown().onTrue(new InstantCommand(m_ArmSubsystem::nudgeElbowDown));
+    m_secondaryController.povRight().onTrue(new InstantCommand(m_armSubsystem::nudgeShoulderForward));
+    m_secondaryController.povLeft().onTrue(new InstantCommand(m_armSubsystem::nudgeShoulderBackward));
+    m_secondaryController.povUp().onTrue(new InstantCommand(m_armSubsystem::nudgeElbowUp));
+    m_secondaryController.povDown().onTrue(new InstantCommand(m_armSubsystem::nudgeElbowDown));
 
     Trigger coneTrigger = new Trigger(
       () -> GameState.getInstance().getGamePieceDesired() == GamePiece.CONE);
@@ -101,33 +87,33 @@ public class RobotContainer {
       () -> GameState.getInstance().getGamePieceDesired() == GamePiece.CUBE);
 
     Trigger approachTrigger = new Trigger(
-      () -> m_ArmSubsystem.getArmPlacement() == KnownArmPlacement.SCORE_PRE);
+      () -> m_armSubsystem.getArmPlacement() == KnownArmPlacement.SCORE_PRE);
 
     m_secondaryController.axisLessThan(Axis.kLeftY.value, -0.5)
-      .onTrue(new InstantCommand(() -> m_ArmSubsystem.setKnownArmPlacement(KnownArmPlacement.SCORE_PRE)));
+      .onTrue(new InstantCommand(() -> m_armSubsystem.setKnownArmPlacement(KnownArmPlacement.SCORE_PRE)));
 
     m_secondaryController.x()
-      .onTrue(new InstantCommand(() -> m_ArmSubsystem.setKnownArmPlacement(KnownArmPlacement.SCORE_PRE))
+      .onTrue(new InstantCommand(() -> m_armSubsystem.setKnownArmPlacement(KnownArmPlacement.SCORE_PRE))
       .andThen(new WaitCommand(1.0))
-      .andThen(new InstantCommand(() -> m_ArmSubsystem.setKnownArmPlacement(KnownArmPlacement.STOWED))));
+      .andThen(new InstantCommand(() -> m_armSubsystem.setKnownArmPlacement(KnownArmPlacement.STOWED))));
 
     m_secondaryController.a().and(cubeTrigger)
-      .onTrue(new InstantCommand(() -> m_ArmSubsystem.setKnownArmPlacement(KnownArmPlacement.CUBE_LOW)));
+      .onTrue(new InstantCommand(() -> m_armSubsystem.setKnownArmPlacement(KnownArmPlacement.CUBE_LOW)));
 
     m_secondaryController.a().and(coneTrigger)
-      .onTrue(new InstantCommand(() -> m_ArmSubsystem.setKnownArmPlacement(KnownArmPlacement.CONE_LOW)));
+      .onTrue(new InstantCommand(() -> m_armSubsystem.setKnownArmPlacement(KnownArmPlacement.CONE_LOW)));
 
     m_secondaryController.b().and(approachTrigger).and(cubeTrigger)
-      .onTrue(new InstantCommand(() -> m_ArmSubsystem.setKnownArmPlacement(KnownArmPlacement.CUBE_MID)));
+      .onTrue(new InstantCommand(() -> m_armSubsystem.setKnownArmPlacement(KnownArmPlacement.CUBE_MID)));
     
     m_secondaryController.b().and(approachTrigger).and(coneTrigger)
-      .onTrue(new InstantCommand(() -> m_ArmSubsystem.setKnownArmPlacement(KnownArmPlacement.CONE_MID)));
+      .onTrue(new InstantCommand(() -> m_armSubsystem.setKnownArmPlacement(KnownArmPlacement.CONE_MID)));
 
     m_secondaryController.y().and(approachTrigger).and(cubeTrigger)
-      .onTrue(new InstantCommand(() -> m_ArmSubsystem.setKnownArmPlacement(KnownArmPlacement.CUBE_HIGH)));
+      .onTrue(new InstantCommand(() -> m_armSubsystem.setKnownArmPlacement(KnownArmPlacement.CUBE_HIGH)));
 
     m_secondaryController.y().and(approachTrigger).and(coneTrigger)
-      .onTrue(new InstantCommand(() -> m_ArmSubsystem.setKnownArmPlacement(KnownArmPlacement.CONE_HIGH)));
+      .onTrue(new InstantCommand(() -> m_armSubsystem.setKnownArmPlacement(KnownArmPlacement.CONE_HIGH)));
 
   }
 
