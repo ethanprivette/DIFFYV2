@@ -58,7 +58,7 @@ public class DriveSubsystem extends SubsystemBase {
       if (timer.hasElapsed(Constants.MOTOR90TURNTIME)) {
         timer.stop();
         ModuleState.getInstance().setModuleState(DrivePoses.forward);
-        runMotors(lateral, lateral);
+        runMotors(forward, forward);
       }
     } else if (forward >= 0.3 && ModuleState.getInstance().getState() == DrivePoses.right) {
       timer.reset();
@@ -67,7 +67,7 @@ public class DriveSubsystem extends SubsystemBase {
 
       if (timer.hasElapsed(Constants.MOTOR90TURNTIME)) {
         ModuleState.getInstance().setModuleState(DrivePoses.forward);
-        runMotors(lateral, lateral);
+        runMotors(forward, forward);
         timer.stop();
       }
     }
