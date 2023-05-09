@@ -11,9 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.ModuleState;
-import frc.robot.RobotContainer;
 import frc.robot.ModuleState.DrivePoses;
-import frc.robot.Commands.TurnModules90;
+import frc.robot.RobotContainer;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -56,7 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
       runMotors(forward, forward);
     } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.left.name()) && forward <= -0.15) {
       m_robotContainer.turnModules90();
-    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.right.name()) && forward >= -0.15) {
+    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.right.name()) && forward <= -0.15) {
       m_robotContainer.turnModules90();
     } else {
       runMotors(0, 0);
