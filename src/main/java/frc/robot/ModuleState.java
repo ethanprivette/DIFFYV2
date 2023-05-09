@@ -9,21 +9,20 @@ public class ModuleState {
 
     private static final ModuleState INSTANCE = new ModuleState();
 
-
     public enum DrivePoses {
         forward,
         left,
         right;
     }
 
+    public ModuleState() {
+        m_ModuleState = DrivePoses.forward;
+    }
+
     private DrivePoses m_ModuleState = DrivePoses.forward;
 
     public static ModuleState getInstance() {
         return INSTANCE;
-    }
-
-    public ModuleState() {
-        m_ModuleState = DrivePoses.forward;
     }
 
     public DrivePoses getState() {

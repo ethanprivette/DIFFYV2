@@ -36,7 +36,7 @@ public class GameState {
         return m_gamePieceHeld;
     }
 
-    public void setGamePieceDesired(boolean pieceHeld) {
+    public void setGamePieceHeld(boolean pieceHeld) {
         m_gamePieceHeld = pieceHeld;
     }
 

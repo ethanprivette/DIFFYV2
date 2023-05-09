@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.GameState.GamePiece;
+import frc.robot.ModuleState.DrivePoses;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.KnownArmPlacement;
 import frc.robot.subsystems.DriveSubsystem;
@@ -37,8 +38,8 @@ public class RobotContainer {
   public RobotContainer() {
     m_driveSubsystem.setDefaultCommand(new RunCommand(() -> m_driveSubsystem.drive(
       modifyAxis(m_primaryController.getLeftY()),
-      modifyAxis(m_primaryController.getLeftX()),
-      modifyAxis(-m_primaryController.getRightX())),
+      m_primaryController.getLeftX(),
+      m_primaryController.getRightX()),
       m_driveSubsystem));
     // Configure the trigger bindings
     configureBindings();
@@ -54,6 +55,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+
+    m_primaryController.a()
+      .onTrue(new InstantCommand(() -> ModuleState.getInstance().setModuleState(DrivePoses.left)));
 
     m_primaryController.povLeft()
       .whileTrue(new RunCommand(
