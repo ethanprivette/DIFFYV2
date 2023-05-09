@@ -9,11 +9,11 @@ import com.NoULib.lib.NoUMotor;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.ModuleState;
-import frc.robot.Commands.TurnModules90;
+import frc.robot.RobotContainer;
 import frc.robot.ModuleState.DrivePoses;
+import frc.robot.Commands.TurnModules90;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -23,7 +23,7 @@ public class DriveSubsystem extends SubsystemBase {
   private static final NoUMotor m_leftModuleMotor1 = new NoUMotor(Constants.LEFTMODULEMOTOR1);
   private static final NoUMotor m_leftModuleMotor2 = new NoUMotor(Constants.LEFTMODULEMOTOR2);
 
-  private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
+  private final RobotContainer m_robotContainer = new RobotContainer();
 
   private final Timer timer = new Timer();
 
@@ -55,9 +55,9 @@ public class DriveSubsystem extends SubsystemBase {
     if (ModuleState.getInstance().getState().name().equals(DrivePoses.forward.name()) && forward <= -0.15) {
       runMotors(forward, forward);
     } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.left.name()) && forward <= -0.15) {
-      new TurnModules90(m_DriveSubsystem);
+      m_robotContainer.turnModules90();
     } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.right.name()) && forward >= -0.15) {
-      new TurnModules90(m_DriveSubsystem);
+      m_robotContainer.turnModules90();
     } else {
       runMotors(0, 0);
     }

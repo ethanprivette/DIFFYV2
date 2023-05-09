@@ -51,6 +51,6 @@ public class TurnModules90 extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (ModuleState.getInstance().getState().toString().equals(DrivePoses.forward));
+    return (ModuleState.getInstance().getState().toString().equals(DrivePoses.forward.toString()));
   }
 }
