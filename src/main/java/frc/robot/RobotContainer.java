@@ -119,7 +119,6 @@ public class RobotContainer {
 
     m_secondaryController.y().and(approachTrigger).and(coneTrigger)
       .onTrue(new InstantCommand(() -> m_armSubsystem.setKnownArmPlacement(KnownArmPlacement.CONE_HIGH)));
-
   }
 
   /**
