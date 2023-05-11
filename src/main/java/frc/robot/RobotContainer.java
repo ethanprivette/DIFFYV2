@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Commands.TurnModules90;
 import frc.robot.GameState.GamePiece;
 import frc.robot.ModuleState.DrivePoses;
 import frc.robot.subsystems.ArmSubsystem;
@@ -38,9 +37,9 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_driveSubsystem.setDefaultCommand(new RunCommand(() -> m_driveSubsystem.drive(
-      modifyAxis(m_primaryController.getLeftY()),
+      m_primaryController.getLeftY(),
       m_primaryController.getLeftX(),
-      m_primaryController.getRightX()),
+      modifyAxis(m_primaryController.getRightX())),
       m_driveSubsystem));
     // Configure the trigger bindings
     configureBindings();
@@ -57,8 +56,14 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    m_primaryController.a()
+    m_primaryController.x()
       .onTrue(new InstantCommand(() -> ModuleState.getInstance().setModuleState(DrivePoses.left)));
+
+    m_primaryController.y()
+      .onTrue(new InstantCommand(() -> ModuleState.getInstance().setModuleState(DrivePoses.forward)));
+
+    m_primaryController.b()
+      .onTrue(new InstantCommand(() -> ModuleState.getInstance().setModuleState(DrivePoses.right)));
 
     m_primaryController.povLeft()
       .whileTrue(new RunCommand(
@@ -129,10 +134,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return null;
     // An example command will be run in autonomous
-  }
-
-  public void turnModules90() {
-    new TurnModules90(new DriveSubsystem());
   }
 
   private static double modifyAxis(double value) {

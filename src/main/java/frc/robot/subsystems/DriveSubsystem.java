@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.ModuleState;
 import frc.robot.ModuleState.DrivePoses;
-import frc.robot.RobotContainer;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -22,9 +21,10 @@ public class DriveSubsystem extends SubsystemBase {
   private static final NoUMotor m_leftModuleMotor1 = new NoUMotor(Constants.LEFTMODULEMOTOR1);
   private static final NoUMotor m_leftModuleMotor2 = new NoUMotor(Constants.LEFTMODULEMOTOR2);
 
-  private final RobotContainer m_robotContainer = new RobotContainer();
-
-  private final Timer timer = new Timer();
+  private final Timer timer1 = new Timer();
+  private final Timer timer2 = new Timer();
+  private final Timer timer3 = new Timer();
+  private final Timer timer4 = new Timer();
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -32,10 +32,13 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightModuleMotor2.setInverted(false);
     m_leftModuleMotor1.setInverted(false);
     m_leftModuleMotor2.setInverted(false);
-    timer.reset();
+    timer1.reset();
+    timer2.reset();
+    timer3.reset();
+    timer4.reset();
   }
 
-  public void runMotors(double speed1, double speed2) {
+  public static void runMotors(double speed1, double speed2) {
     m_rightModuleMotor1.set(speed1);
     m_rightModuleMotor2.set(speed2);
     m_leftModuleMotor1.set(speed1);
@@ -50,84 +53,91 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void drive(double forward, double lateral, double rot) {
 
-    // Forward driving logic
-    if (ModuleState.getInstance().getState().name().equals(DrivePoses.forward.name()) && forward <= -0.15) {
-      runMotors(forward, forward);
-    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.left.name()) && forward <= -0.15) {
-      m_robotContainer.turnModules90();
-    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.right.name()) && forward <= -0.15) {
-      m_robotContainer.turnModules90();
+    if (ModuleState.getInstance().getState().name().equals(DrivePoses.forward.name()) && forward >= 0.15) {
+      runMotors(-forward, -forward);
+    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.left.name()) && forward >= 0.15) {
+      timer1.start();
+
+      runMotors(Constants.MOTORDRIVESPEED, Constants.MOTORTURNSPEED);
+
+      if (timer1.get() >= Constants.MOTOR90TURNTIME) {
+        ModuleState.getInstance().setModuleState(DrivePoses.forward);
+        timer1.stop();
+        timer1.reset();
+      }
+
+    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.right.name()) && forward >= 0.15) {
+      timer1.start();
+
+      runMotors(Constants.MOTORTURNSPEED, Constants.MOTORDRIVESPEED);
+
+      if (timer1.get() >= Constants.MOTOR90TURNTIME) {
+        ModuleState.getInstance().setModuleState(DrivePoses.forward);
+        timer1.stop();
+        timer1.reset();
+      }
+      
     } else {
       runMotors(0, 0);
+      timer1.reset();
     }
 
-    // // Backwards drive logic
-    // if (forward >= 0.15 && ModuleState.getInstance().getState() == DrivePoses.forward) {
-    //   runMotors(forward, forward);
-    // } else if (forward >= 0.15 && ModuleState.getInstance().getState() == DrivePoses.left) {
-    //   timer.reset();
-    //   timer.start();
+    // if (ModuleState.getInstance().getState().name().equals(DrivePoses.forward.name()) && forward <= -0.15) {
+    //   runMotors(-forward, -forward);
+    // } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.left.name()) && forward <= -0.15) {
+    //   timer2.start();
+
     //   runMotors(Constants.MOTORDRIVESPEED, Constants.MOTORTURNSPEED);
 
-    //   if (timer.get() >= (Constants.MOTOR90TURNTIME)) {
-    //     new InstantCommand(() -> ModuleState.getInstance().setModuleState(DrivePoses.forward));
-    //     runMotors(forward, forward);
-    //     timer.stop();
-    //     timer.reset();
+    //   if (timer2.get() >= Constants.MOTOR90TURNTIME) {
+    //     ModuleState.getInstance().setModuleState(DrivePoses.forward);
+    //     timer2.stop();
+    //     timer2.reset();
     //   }
-    // } else if (forward >= 0.15 && ModuleState.getInstance().getState() == DrivePoses.right) {
-    //   timer.reset();
-    //   timer.start();
+
+    // } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.right.name()) && forward <= -0.15) {
+    //   timer2.start();
+
     //   runMotors(Constants.MOTORTURNSPEED, Constants.MOTORDRIVESPEED);
 
-    //   if (timer.get() >= (Constants.MOTOR90TURNTIME)) {
-    //     new InstantCommand(() -> ModuleState.getInstance().setModuleState(DrivePoses.forward));
-    //     runMotors(forward, forward);
-    //     timer.stop();
-    //     timer.reset();
+    //   if (timer2.get() >= Constants.MOTOR90TURNTIME) {
+    //     ModuleState.getInstance().setModuleState(DrivePoses.forward);
+    //     timer2.stop();
+    //     timer2.reset();
     //   }
+      
+    // } else {
+    //   runMotors(0, 0);
+    //   timer2.reset();
     // }
 
-    // // Left drive logic
-    // if (lateral <= -0.15 && ModuleState.getInstance().getState() == DrivePoses.left) {
+    // LEFT
+    // if (ModuleState.getInstance().getState().name().equals(DrivePoses.left.name()) && lateral >= 0.15) {
     //   runMotors(lateral, lateral);
-    // } else if (lateral <= -0.15 && ModuleState.getInstance().getState() == DrivePoses.right) {
+    // } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.right.name()) && lateral >= 0.5) {
     //   runMotors(lateral, lateral);
-    // } else if (lateral <= -0.15 && ModuleState.getInstance().getState() == DrivePoses.forward) {
-    //   timer.reset();
+    // } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.forward.name()) && lateral >= 0.15) {
     //   timer.start();
+
     //   runMotors(Constants.MOTORDRIVESPEED, Constants.MOTORTURNSPEED);
 
-    //   if (timer.get() >= (Constants.MOTOR90TURNTIME)) {
-    //     new InstantCommand(() -> ModuleState.getInstance().setModuleState(DrivePoses.left));
+    //   if (timer.get() >= Constants.MOTOR90TURNTIME) {
+    //     ModuleState.getInstance().setModuleState(DrivePoses.left);
     //     timer.stop();
     //     timer.reset();
-    //     runMotors(lateral, lateral);
     //   }
-    // } 
-
-    // // Right drive logic
-    // if (lateral >= 0.15 && ModuleState.getInstance().getState() == DrivePoses.right) {
-    //   runMotors(lateral, lateral);
-    // }  else if (lateral >= 0.15 && ModuleState.getInstance().getState() == DrivePoses.left) {
-    //   runMotors(lateral, lateral);
-    // } else if (lateral >= 0.15 && ModuleState.getInstance().getState() == DrivePoses.forward) {
+      
+    // } else {
+    //   runMotors(0.0, 0.0);
     //   timer.reset();
-    //   timer.start();
-    //   runMotors(Constants.MOTORTURNSPEED, Constants.MOTORDRIVESPEED);
-
-    //   if (timer.get() >= (Constants.MOTOR90TURNTIME)) {
-    //     new InstantCommand(() -> ModuleState.getInstance().setModuleState(DrivePoses.right));
-    //     timer.stop();
-    //     timer.reset();
-    //     runMotors(lateral, lateral);
-    //   }
     // }
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Drive Timer", timer.get());
+    SmartDashboard.putNumber("Backward Timer", timer1.get());
+    SmartDashboard.putNumber("Forward Timer", timer2.get());
   }
 }

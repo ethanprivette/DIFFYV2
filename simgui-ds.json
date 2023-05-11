@@ -102,5 +102,6 @@
     {
       "useGamepad": true
     }
-  ]
+  ],
+  "useEnableDisableHotkeys": true
 }
