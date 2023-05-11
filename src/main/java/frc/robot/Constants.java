@@ -28,7 +28,8 @@ public final class Constants {
     public static final double MOTORDRIVESPEED = 0.75;
     public static final double MOTORTURNSPEED = 0.9;
     
-    public static final double MOTOR90TURNTIME = 1.0; //3.4
+    public static final double MOTOR45TURNTIME = 0.17;
+    public static final double MOTOR90TURNTIME = 1.0; //.34
     public static final double MOTOR180TURNTIME = 0.64;
 
     public static final double SHOULDERNUDGEDEGREES = 2.0;
