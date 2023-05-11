@@ -90,6 +90,12 @@ public class RobotContainer {
     m_secondaryController.povUp().onTrue(new InstantCommand(m_armSubsystem::nudgeElbowUp));
     m_secondaryController.povDown().onTrue(new InstantCommand(m_armSubsystem::nudgeElbowDown));
 
+    m_secondaryController.start()
+      .onTrue(new InstantCommand(() -> GameState.getInstance().setGamePieceDesired(GamePiece.CONE)));
+
+    m_secondaryController.back()
+      .onTrue(new InstantCommand(() -> GameState.getInstance().setGamePieceDesired(GamePiece.CUBE)));
+
     Trigger coneTrigger = new Trigger(
       () -> GameState.getInstance().getGamePieceDesired() == GamePiece.CONE);
 
