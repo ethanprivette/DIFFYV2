@@ -17,7 +17,6 @@ public class ArmSubsystem extends SubsystemBase {
   private NoUServo m_shoulderServo = new NoUServo(1);
   private NoUServo m_elbowServo = new NoUServo(2);
 
-
   public enum KnownArmPlacement {
 
     STOWED(101.0, -58.0),
