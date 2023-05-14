@@ -12,7 +12,9 @@ public class ModuleState {
     public enum DrivePoses {
         forward,
         left,
-        right;
+        right,
+        turnL,
+        turnR;
     }
 
     public ModuleState() {
