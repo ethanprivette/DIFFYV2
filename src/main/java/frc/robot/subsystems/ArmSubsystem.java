@@ -21,6 +21,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     STOWED(101.0, -58.0),
     SCORE_PRE(108.0, 5.7),
+    SUBSTATION_HALFWAY(108.0, 3.0),
     CONE_HIGH(64.0, 36.0),
     CONE_MID(92.5, 11.5),
     CONE_LOW(90.0, -53.0),
