@@ -14,6 +14,7 @@ This code was written to run in WPILib VSCode on a NoU2/ESP32 combo
 When running code use ``` Simulate Robot Code ``` along with the intructions for running the proxy server [here](https://github.com/furseiry/NoU-WPILib#use)
 ## Coming Soon
 <sup><sup>(They will be done when I feel like it)
-- Get it working
 - Making it better
-- Other stuff i'm sure i'll think of
+- Ensuring Arm Setpoints
+- Adding vision tracking
+- more thigns
