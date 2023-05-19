@@ -46,112 +46,53 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void drive(double throttle, double lateral, double rot) {
 
-    if (throttle >= 0.15) {
-      switch (ModuleState.getInstance().getState().name()) {
-        case "forward":
-          runMotors(-throttle, -throttle);
-          break;
+    // BACKWARDS
+    if (ModuleState.getInstance().getState().name().equals(DrivePoses.forward.name()) && throttle >= 0.15) {
+      runMotors(-throttle, -throttle);
+    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.left.name()) && throttle >= 0.15) {
+      timer.start();
 
-        case "left":
-          timer.start();
+      runMotors(Constants.MOTORDRIVESPEED, Constants.MOTORTURNSPEED);
 
-          runMotors(Constants.MOTORDRIVESPEED, Constants.MOTORTURNSPEED);
-
-          if (timer.get() >= Constants.MOTOR90TURNTIME) {
-            ModuleState.getInstance().setModuleState(DrivePoses.forward);
-            timer.stop();
-            timer.reset();
-          }
-          break;
-
-        case "right":
-          timer.start();
-
-          runMotors(Constants.MOTORTURNSPEED, Constants.MOTORDRIVESPEED);
-
-          if (timer.get() >= Constants.MOTOR90TURNTIME) {
-            ModuleState.getInstance().setModuleState(DrivePoses.forward);
-            timer.stop();
-            timer.reset();
-          }
-          break;
-
-        case "turnL":
-          timer.start();
-
-          runMotors(Constants.MOTORDRIVESPEED, Constants.MOTORTURNSPEED);
-
-          if (timer.get() >= Constants.MOTOR45TURNTIME) {
-            ModuleState.getInstance().setModuleState(DrivePoses.forward);
-            timer.stop();
-            timer.reset();
-          }
-          break;
-
-        case "TurnR":
-          timer.start();
-
-          runMotors(Constants.MOTORTURNSPEED, Constants.MOTORTURNSPEED);
-
-          if (timer.get() >= Constants.MOTOR45TURNTIME) {
-            ModuleState.getInstance().setModuleState(DrivePoses.forward);
-            timer.stop();
-            timer.reset();
-          }
-          break;
-
-        default:
-          break;
+      if (timer.get() >= Constants.MOTOR90TURNTIME) {
+        ModuleState.getInstance().setModuleState(DrivePoses.forward);
+        timer.stop();
+        timer.reset();
       }
-    }
 
-    // // BACKWARDS
-    // if (ModuleState.getInstance().getState().name().equals(DrivePoses.forward.name()) && throttle >= 0.15) {
-    //   runMotors(-throttle, -throttle);
-    // } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.left.name()) && throttle >= 0.15) {
-    //   timer.start();
+    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.right.name()) && throttle >= 0.15) {
+      timer.start();
 
-    //   runMotors(Constants.MOTORDRIVESPEED, Constants.MOTORTURNSPEED);
+      runMotors(Constants.MOTORTURNSPEED, Constants.MOTORDRIVESPEED);
 
-    //   if (timer.get() >= Constants.MOTOR90TURNTIME) {
-    //     ModuleState.getInstance().setModuleState(DrivePoses.forward);
-    //     timer.stop();
-    //     timer.reset();
-    //   }
+      if (timer.get() >= Constants.MOTOR90TURNTIME) {
+        ModuleState.getInstance().setModuleState(DrivePoses.forward);
+        timer.stop();
+        timer.reset();
+      }
+    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.turnL.name()) && throttle >= 0.15) {
+      timer.start();
 
-    // } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.right.name()) && throttle >= 0.15) {
-    //   timer.start();
+      runMotors(Constants.MOTORDRIVESPEED, Constants.MOTORTURNSPEED);
 
-    //   runMotors(Constants.MOTORTURNSPEED, Constants.MOTORDRIVESPEED);
+      if (timer.get() >= Constants.MOTOR45TURNTIME) {
+        ModuleState.getInstance().setModuleState(DrivePoses.forward);
+        timer.stop();
+        timer.reset();
+      }
+    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.turnR.name()) && throttle >= 0.15) {
+      timer.start();
 
-    //   if (timer.get() >= Constants.MOTOR90TURNTIME) {
-    //     ModuleState.getInstance().setModuleState(DrivePoses.forward);
-    //     timer.stop();
-    //     timer.reset();
-    //   }
-    // } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.turnL.name()) && throttle >= 0.15) {
-    //   timer.start();
+      runMotors(Constants.MOTORTURNSPEED, Constants.MOTORDRIVESPEED);
 
-    //   runMotors(Constants.MOTORDRIVESPEED, Constants.MOTORTURNSPEED);
-
-    //   if (timer.get() >= Constants.MOTOR45TURNTIME) {
-    //     ModuleState.getInstance().setModuleState(DrivePoses.forward);
-    //     timer.stop();
-    //     timer.reset();
-    //   }
-    // } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.turnR.name()) && throttle >= 0.15) {
-    //   timer.start();
-
-    //   runMotors(Constants.MOTORTURNSPEED, Constants.MOTORDRIVESPEED);
-
-    //   if (timer.get() >= Constants.MOTOR45TURNTIME) {
-    //     ModuleState.getInstance().setModuleState(DrivePoses.forward);
-    //     timer.stop();
-    //     timer.reset();
-    //   }
+      if (timer.get() >= Constants.MOTOR45TURNTIME) {
+        ModuleState.getInstance().setModuleState(DrivePoses.forward);
+        timer.stop();
+        timer.reset();
+      }
       
     // FORWARDS
-    if (ModuleState.getInstance().getState().name().equals(DrivePoses.forward.name()) && throttle <= -0.15) {
+    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.forward.name()) && throttle <= -0.15) {
       runMotors(-throttle, -throttle);
     } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.left.name()) && throttle <= -0.15) {
       timer.start();
@@ -272,16 +213,9 @@ public class DriveSubsystem extends SubsystemBase {
     
     // TURN LEFT
     else if (ModuleState.getInstance().getState().name().equals(DrivePoses.turnL.name()) && rot <= -0.15) {
-      runMotors(rot, rot);
+      runMotors(-rot, -rot);
     } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.turnR.name()) && rot <= -0.15) {
-      timer.start();
-      runMotors(Constants.MOTORDRIVESPEED, Constants.MOTORTURNSPEED);
-
-      if (timer.get() >= Constants.MOTOR90TURNTIME) {
-        ModuleState.getInstance().setModuleState(DrivePoses.turnL);
-        timer.stop();
-        timer.reset();
-      }
+      runMotors(rot, rot);
     } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.right.name()) && rot <= -0.15) {
       timer.start();
 
@@ -317,16 +251,8 @@ public class DriveSubsystem extends SubsystemBase {
     // TURN RIGHT
     else if (ModuleState.getInstance().getState().name().equals(DrivePoses.turnR.name()) && rot >= 0.15) {
       runMotors(rot, rot);
-    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.right.name()) && rot >= 0.15) {
-      timer.start();
-
-      runMotors(Constants.MOTORDRIVESPEED, Constants.MOTORTURNSPEED);
-
-      if (timer.get() >= Constants.MOTOR45TURNTIME) {
-        ModuleState.getInstance().setModuleState(DrivePoses.turnR);
-        timer.stop();
-        timer.reset();
-      }
+    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.turnL.name()) && rot >= 0.15) {
+      runMotors(-rot, -rot);
     } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.forward.name()) && rot >= 0.15) {
       timer.start();
 
@@ -337,7 +263,7 @@ public class DriveSubsystem extends SubsystemBase {
         timer.stop();
         timer.reset();
       }
-    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.turnL.name()) && rot >= 0.15) {
+    } else if (ModuleState.getInstance().getState().name().equals(DrivePoses.right.name()) && rot >= 0.15) {
       timer.start();
 
       runMotors(Constants.MOTORTURNSPEED, Constants.MOTORDRIVESPEED);
