@@ -7,10 +7,16 @@ package frc.robot;
 import com.NoULib.lib.NoUGPIO;
 import com.NoULib.lib.NoUGPIO.GPIOMode;
 
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.ModuleState.DrivePoses;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -27,6 +33,10 @@ public class Robot extends TimedRobot {
 
   NoUGPIO gpio2 = new NoUGPIO(2, GPIOMode.WRITE_ONLY);
 
+  private BooleanLogEntry boolLog;
+  private DoubleLogEntry doubleLog;
+  private StringLogEntry stringLog;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -36,6 +46,12 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    DataLogManager.start();
+
+    DataLog log = DataLogManager.getLog();
+    boolLog = new BooleanLogEntry(log, "boolean");
+    doubleLog = new DoubleLogEntry(log, "double");
+    stringLog = new StringLogEntry(log, "string");
   }
 
   /**
@@ -95,6 +111,11 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     SmartDashboard.putString("Module State", ModuleState.getInstance().getState().toString());
     SmartDashboard.putString("Game State", GameState.getInstance().getGamePieceDesired().toString());
+
+    if (ModuleState.getInstance().getState().name().equals(DrivePoses.forward.name())) {
+      boolLog.append(true);
+    }
+    boolLog.append(false);
   }
 
   @Override
