@@ -21,6 +21,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     STOWED(101.0, -58.0),
     SCORE_PRE(108.0, 5.7),
+    SUBSTATION_HALFWAY(108.0, 3.0),
     CONE_HIGH(64.0, 36.0),
     CONE_MID(92.5, 11.5),
     CONE_LOW(90.0, -53.0),
@@ -28,8 +29,8 @@ public class ArmSubsystem extends SubsystemBase {
     CUBE_MID(91.0, -1.0),
     CUBE_LOW(90.0, -53.0);
 
-    public final double m_shoulderAngle;
-    public final double m_elbowAngle;
+    public double m_shoulderAngle;
+    public double m_elbowAngle;
 
     private KnownArmPlacement(double shoulderAngle, double elbowAngle) {
       m_shoulderAngle = shoulderAngle;
@@ -69,10 +70,12 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void setShoulderPosition(double targetPos) {
     m_shoulderServo.setAngle(targetPos);
+    m_lastPlacement.m_shoulderAngle += targetPos;
   }
 
   public void setElbowPosition(double targetPos) {
     m_elbowServo.setAngle(targetPos);
+    m_lastPlacement.m_elbowAngle += targetPos;
   }
 
   @Override

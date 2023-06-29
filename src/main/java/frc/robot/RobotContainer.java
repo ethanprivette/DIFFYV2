@@ -85,10 +85,10 @@ public class RobotContainer {
         () -> m_driveSubsystem.drive(-1, 0, 0),
         m_driveSubsystem));
 
-    m_secondaryController.povRight().onTrue(new InstantCommand(m_armSubsystem::nudgeShoulderForward));
-    m_secondaryController.povLeft().onTrue(new InstantCommand(m_armSubsystem::nudgeShoulderBackward));
-    m_secondaryController.povUp().onTrue(new InstantCommand(m_armSubsystem::nudgeElbowUp));
-    m_secondaryController.povDown().onTrue(new InstantCommand(m_armSubsystem::nudgeElbowDown));
+    // m_secondaryController.povRight().onTrue(new InstantCommand(m_armSubsystem::nudgeShoulderForward));
+    // m_secondaryController.povLeft().onTrue(new InstantCommand(m_armSubsystem::nudgeShoulderBackward));
+    // m_secondaryController.povUp().onTrue(new InstantCommand(m_armSubsystem::nudgeElbowUp));
+    // m_secondaryController.povDown().onTrue(new InstantCommand(m_armSubsystem::nudgeElbowDown));
 
     m_secondaryController.start()
       .onTrue(new InstantCommand(() -> GameState.getInstance().setGamePieceDesired(GamePiece.CONE)));
@@ -107,6 +107,9 @@ public class RobotContainer {
 
     m_secondaryController.axisLessThan(Axis.kLeftY.value, -0.5)
       .onTrue(new InstantCommand(() -> m_armSubsystem.setKnownArmPlacement(KnownArmPlacement.SCORE_PRE)));
+
+    m_secondaryController.rightBumper()
+      .onTrue(new InstantCommand(() -> m_armSubsystem.setKnownArmPlacement(KnownArmPlacement.SUBSTATION_HALFWAY)));
 
     m_secondaryController.x()
       .onTrue(new InstantCommand(() -> m_armSubsystem.setKnownArmPlacement(KnownArmPlacement.SCORE_PRE))
