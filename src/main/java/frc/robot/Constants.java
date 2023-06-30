@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -16,6 +19,26 @@ public final class Constants {
 
     public static final int PRIMARYCONTROLLERPORT = 0;
     public static final int SECONDARYCONTROLLERPORT = 1;
+
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.53;
+    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.53;
+
+    public static final double MAX_VELOCITY_METERS_PER_SEC = 5.0;
+
+    public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SEC = MAX_VELOCITY_METERS_PER_SEC /
+        Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+            DRIVETRAIN_WHEELBASE_METERS / 2.0);
+
+    public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
+        // Front
+        new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+            Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
+        // Back left
+        new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+            Constants.DRIVETRAIN_WHEELBASE_METERS/ 2.0),
+        // Back right
+        new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+            Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
     public static final int RIGHTMODULEMOTOR1 = 1;
     public static final int RIGHTMODULEMOTOR2 = 2;

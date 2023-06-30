@@ -37,9 +37,11 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_driveSubsystem.setDefaultCommand(new RunCommand(() -> m_driveSubsystem.drive(
-      m_primaryController.getLeftY(),
-      m_primaryController.getLeftX(),
-      modifyAxis(m_primaryController.getRightX())),
+      modifyAxis(m_primaryController.getLeftY()) * Constants.MAX_VELOCITY_METERS_PER_SEC,
+      modifyAxis(m_primaryController.getLeftX()) * Constants.MAX_VELOCITY_METERS_PER_SEC,
+      modifyAxis(m_primaryController.getRightX()) 
+        * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SEC,
+      false),
       m_driveSubsystem));
     // Configure the trigger bindings
     configureBindings();
@@ -67,22 +69,22 @@ public class RobotContainer {
 
     m_primaryController.povLeft()
       .whileTrue(new RunCommand(
-        () -> m_driveSubsystem.drive(0, -1, 0),
+        () -> m_driveSubsystem.drive(0.0, -1.0, 0.0, false),
         m_driveSubsystem));
 
     m_primaryController.povRight()
       .whileTrue(new RunCommand(
-        () -> m_driveSubsystem.drive(0, 1, 0),
+        () -> m_driveSubsystem.drive(0.0, 1, 0.0, false),
         m_driveSubsystem));     
 
     m_primaryController.povUp()
       .whileTrue(new RunCommand(
-        () -> m_driveSubsystem.drive(1, 0, 0),
+        () -> m_driveSubsystem.drive(1, 0.0, 0.0, false),
         m_driveSubsystem));
 
     m_primaryController.povDown()
       .whileTrue(new RunCommand(
-        () -> m_driveSubsystem.drive(-1, 0, 0),
+        () -> m_driveSubsystem.drive(-1, 0.0, 0.0, false),
         m_driveSubsystem));
 
     // m_secondaryController.povRight().onTrue(new InstantCommand(m_armSubsystem::nudgeShoulderForward));
