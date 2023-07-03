@@ -4,11 +4,12 @@
 
 package frc.robot.subsystems;
 
-import com.NoULib.lib.NoUMotor;
-
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,28 +18,42 @@ import frc.robot.Constants;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  private static final NoUMotor m_rightModuleMotor1 = new NoUMotor(Constants.RIGHTMODULEMOTOR1);
-  private static final NoUMotor m_rightModuleMotor2 = new NoUMotor(Constants.RIGHTMODULEMOTOR2);
-
-  private static final NoUMotor m_leftModuleMotor1 = new NoUMotor(Constants.LEFTMODULEMOTOR1);
-  private static final NoUMotor m_leftModuleMotor2 = new NoUMotor(Constants.LEFTMODULEMOTOR2);
-
   private final Timer timer = new Timer();
 
-  /** Creates a new DriveSubsystem. */
+  private final DiffModule m_frontModule = new DiffModule(
+    Constants.FRONTMODULEMOTOR1,
+    Constants.FRONTMODULEMOTOR2,
+    Constants.FRONTMODULESTEEROFFSET,
+    Constants.FRONTMODULEMOTOR1INVERT,
+    Constants.FRONTMODULEMOTOR2INVERT);
+  private final DiffModule m_LeftModule = new DiffModule(
+    Constants.LEFTMODULEMOTOR1,
+    Constants.LEFTMODULEMOTOR2,
+    Constants.LEFTMODULESTEEROFFSET,
+    Constants.FRONTMODULEMOTOR1INVERT,
+    Constants.FRONTMODULEMOTOR2INVERT);
+  private final DiffModule m_rightModule = new DiffModule(
+    Constants.FRONTMODULEMOTOR1,
+    Constants.FRONTMODULEMOTOR2,
+    Constants.RIGHTMODULESTEEROFFSET,
+    Constants.FRONTMODULEMOTOR1INVERT,
+    Constants.RIGHTMODULEMOTOR2INVERT);
+
+  private final SwerveDriveOdometry m_odometry;
+
+  // /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    m_rightModuleMotor1.setInverted(false);
-    m_rightModuleMotor2.setInverted(false);
-    m_leftModuleMotor1.setInverted(false);
-    m_leftModuleMotor2.setInverted(false);
+    m_odometry = new SwerveDriveOdometry(Constants.DRIVE_KINEMATICS,
+      Rotation2d.fromDegrees(0.0), // TODO: read imu value 
+      getModulePositions());
   }
 
-  public static void runMotors(double speed1, double speed2) {
-    m_rightModuleMotor1.set(speed1);
-    m_rightModuleMotor2.set(speed2);
-    m_leftModuleMotor1.set(speed1);
-    m_leftModuleMotor2.set(speed2);
-  }
+  // public static void runMotors(double speed1, double speed2) {
+  //   m_rightModuleMotor1.set(speed1);
+  //   m_rightModuleMotor2.set(speed2);
+  //   m_leftModuleMotor1.set(speed1);
+  //   m_leftModuleMotor2.set(speed2);
+  // }
 
   /**
    * Drives motors based on joystick input
@@ -55,12 +70,39 @@ public class DriveSubsystem extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(swervemodulestates, Constants.MAX_VELOCITY_METERS_PER_SEC);
   }
 
-  public void setModuleState(SwerveModuleState[] states) {
-    
+  public void setModuleStates(SwerveModuleState[] states) {
+    m_frontModule.setDesiredState(states[0]);
+    m_LeftModule.setDesiredState(states[1]);
+    m_rightModule.setDesiredState(states[2]);
   } 
 
+  public Rotation2d getRotation2d() {
+    return Rotation2d.fromDegrees(0.0); // imu value
+  }
+
+  public void updateOdometry() {
+    m_odometry.update(
+      Rotation2d.fromDegrees(0.0), getModulePositions());
+  }
+
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
+
+  public void resetOdometry(Pose2d position) {
+    m_odometry.resetPosition(getRotation2d(), getModulePositions(), position);
+  }
+
+  public SwerveModulePosition[] getModulePositions() {
+    return new SwerveModulePosition[] {
+      m_frontModule.getPosition(),
+      m_LeftModule.getPosition(),
+      m_rightModule.getPosition()
+    };
+  }
+
   public void stop() {
-    runMotors(0.0, 0.0);
+    drive(0.0, 0.0, 0.0, false);
   }
 
   @Override

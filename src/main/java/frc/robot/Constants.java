@@ -40,13 +40,25 @@ public final class Constants {
         new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
             Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
-    public static final int RIGHTMODULEMOTOR1 = 1;
-    public static final int RIGHTMODULEMOTOR2 = 2;
+    public static final int FRONTMODULEMOTOR1 = 1;
+    public static final int FRONTMODULEMOTOR2 = 2;
+    public static final boolean FRONTMODULEMOTOR1INVERT = false;
+    public static final boolean FRONTMODULEMOTOR2INVERT = false;
+    public static final double FRONTMODULESTEEROFFSET = 0.0;
 
-    public static final int LEFTMODULEMOTOR1 = 3;
-    public static final int LEFTMODULEMOTOR2 = 4;
+    public static final int RIGHTMODULEMOTOR1 = 3;
+    public static final int RIGHTMODULEMOTOR2 = 4;
+    public static final boolean RIGHTMODULEMOTOR1INVERT = false;
+    public static final boolean RIGHTMODULEMOTOR2INVERT = false;
+    public static final double RIGHTMODULESTEEROFFSET = 0.0;
 
-    public static final int INTAKEMOTOR = 5;
+    public static final int LEFTMODULEMOTOR1 = 5;
+    public static final int LEFTMODULEMOTOR2 = 6;
+    public static final boolean LEFTMODULEMOTOR1INVERT = false;
+    public static final boolean LEFTMODULEMOTOR2INVERT = false;
+    public static final double LEFTMODULESTEEROFFSET = 0.0;
+
+    public static final int INTAKEMOTOR = 7;
 
     public static final double MOTORDRIVESPEED = 0.75;
     public static final double MOTORTURNSPEED = 0.9;
